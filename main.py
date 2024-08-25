@@ -1,3 +1,5 @@
+import re
+
 workers_stats_rows = [
     "Андрей 9",
     "Василий 11",
@@ -15,12 +17,16 @@ def get_statistics(workers_stats_rows: list[str]) -> list[str]:
     for worker_stats_row in workers_stats_rows:
         number: str | int = ""
         worker_name: str = ""
-        for i in range((len(worker_stats_row) - 1), 0, -1):
-            if worker_stats_row[i] == " ":
-                worker_name = worker_stats_row[0:i]
-                break
 
-            number = worker_stats_row[i] + number
+        number = re.findall('\\s([^\\s]*)$', worker_stats_row)[0]
+        worker_name = worker_stats_row[0:-len(number)]
+
+        # for i in range((len(worker_stats_row) - 1), 0, -1):
+        #     if worker_stats_row[i] == " ":
+        #         worker_name = worker_stats_row[0:i]
+        #         break
+        #
+        #     number = worker_stats_row[i] + number
 
         if workers_dict.get(worker_name) is not None:
             workers_dict[worker_name][0] = workers_dict[worker_name][0] + f", {number}"
